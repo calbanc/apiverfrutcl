@@ -22,9 +22,5 @@ class ProtocolosUsuarioController extends Controller
         'status'=>'succes',
         'post'=>$usuarios
     ]);
-
-   
-
-
-
+}
 }

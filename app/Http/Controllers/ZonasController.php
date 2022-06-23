@@ -15,9 +15,32 @@ class ZonasController extends Controller
         $params_array=json_decode($json,true);
 
         if(!empty($params_array)){
-            $cod_emp=$params_array['COD_EMP'];
-            $zonas=Zonas::select('ZON', 'NOM_ZON')->where('COD_EMP',$cod_emp)
-            ->where('COD_TEM','21')
+
+
+
+            $info=array("Database"=>"erpfrusys","UID"=>'reporte',"PWD"=>'abc.123456',"CharacterSet"=>"UTF-8");
+            $hostname_localhost="192.168.2.210";
+            $conexion = sqlsrv_connect($hostname_localhost,$info);
+
+
+            $COD_EMP=$params_array['COD_EMP'];
+            $COD_TEM=$params_array['COD_TEM'];
+
+            if(is_numeric($COD_EMP)&&$COD_EMP<>'9'){
+                $consultaempresa="SELECT COD_EMP FROM EMPRESAS WHERE ID_EMPRESA_REM='{$COD_EMP}'";
+                $resultadoempresa=sqlsrv_query($conexion,$consultaempresa);
+
+                if($registroempresa=sqlsrv_fetch_array($resultadoempresa)){
+                    $COD_EMP=$registroempresa['COD_EMP'];
+                }
+            }else{
+                if($COD_EMP=='9'){
+                    $COD_EMP='ARAP';
+                }
+            }
+
+            $zonas=Zonas::select('ZON', 'NOM_ZON')->where('COD_EMP',$COD_EMP)
+            ->where('COD_TEM',$COD_TEM)
             ->get();
 
                 $data=array(
@@ -40,4 +63,5 @@ class ZonasController extends Controller
        return response()->json($data,$data['code']);
 
     }
+
 }

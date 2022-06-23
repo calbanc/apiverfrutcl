@@ -9,4 +9,9 @@ class TemporadaRemuneraciones extends Model
 {
     protected $connection = 'sqlsrv4';
     protected $table='Temporada';
+    protected $fillable = [
+        'IdEmpresa',
+        'IdTemporada',
+        'Descripcion'
+    ];
 }
